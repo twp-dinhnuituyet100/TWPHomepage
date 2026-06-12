@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The White Peak - Bách Khoa Toàn Thư</title>
+    
+    <link rel="icon" href="TWP BG.jpg" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* FONT AVENGER VIỆT HOÁ */
+        @font-face {
+            font-family: 'Avenger';
+            src: url('Avenger-Viet-Hoa.ttf') format('truetype');
+            font-weight: normal; font-style: normal; font-display: swap;
+        }
+
+        :root {
+            --bg-color: #FAFAFA; --gold-light: #F7F3E8; --gold-primary: #C5A059; 
+            --text-dark: #2C3539; --text-light: #5A6B7A; --border-color: #E2D7C1;
+        }
+
+        body { font-family: 'Nunito', sans-serif; background: var(--bg-color); color: var(--text-dark); margin: 0; line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, h4, .section-title, .footer-logo { font-family: 'Quicksand', sans-serif; font-weight: 700; margin: 0; }
+        a { text-decoration: none; color: inherit; }
+
+        /* HERO BANNER */
+        .hero-banner {
+            position: relative; height: 100vh;
+            background: url('TWP BG.jpg') center/cover fixed #2C3539;
+            display: flex; justify-content: center; align-items: center; text-align: center; color: white;
+        }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(44, 53, 57, 0.8), rgba(44, 53, 57, 0.4) 50%, #FAFAFA); }
+        .hero-content { position: relative; z-index: 2; padding: 20px; width: 100%; max-width: 900px; }
+        
+        .main-title { font-family: 'Avenger', sans-serif; font-size: 6em; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 6px; margin-bottom: 10px; text-shadow: 3px 5px 15px rgba(0,0,0,0.8); line-height: 1.1; }
+        .sub-title { font-size: 1.5em; font-weight: 400; letter-spacing: 2px; margin-bottom: 50px; }
+
+        /* QUOTE SLIDER */
+        .quote-container { position: relative; height: 160px; border-block: 1px dashed rgba(197, 160, 89, 0.5); display: flex; align-items: center; justify-content: center; }
+        .quote-slide { position: absolute; width: 100%; opacity: 0; transition: opacity 1s; font-size: 1.3em; font-style: italic; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); padding: 0 20px; box-sizing: border-box; }
+        .quote-slide.active { opacity: 1; }
+        .quote-author { display: block; font-size: 0.8em; color: var(--gold-primary); margin-top: 15px; font-weight: bold; font-style: normal; text-transform: uppercase; }
+
+        /* SCROLL REVEAL & FILTER */
+        .reveal-section { opacity: 0; transform: translateY(50px); transition: all 0.6s ease-out; }
+        .reveal-section.active { opacity: 1; transform: translateY(0); }
+        
+        .directory-section { max-width: 1300px; margin: 80px auto; padding: 0 20px; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-title { font-size: 2.5em; color: var(--gold-primary); text-transform: uppercase; border-bottom: 2px solid var(--gold-primary); display: inline-block; padding-bottom: 10px; }
+        
+        .filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 50px; }
+        .filter-btn { background: transparent; border: 2px solid var(--gold-primary); color: var(--text-dark); padding: 8px 20px; border-radius: 20px; font: inherit; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .filter-btn:hover { background: var(--gold-light); }
+        .filter-btn.active { background: var(--gold-primary); color: #fff; box-shadow: 0 4px 10px rgba(197, 160, 89, 0.4); }
+
+        /* CARD GRID */
+        .character-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+        .char-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color); transition: 0.3s; position: relative; }
+        .char-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(197, 160, 89, 0.2); border-color: var(--gold-primary); }
+        
+        /* Box Ảnh - Tích hợp tag Tập Phim (Episode) gọn gàng */
+        .char-img-box { width: 100%; aspect-ratio: 3/4; background: var(--gold-light); position: relative; display: flex; align-items: center; justify-content: center; color: var(--gold-primary); font-size: 0.9em; text-align: center; overflow: hidden; }
+        .setting-img-box { aspect-ratio: 16/9; }
+        .char-img-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: 0.6s; z-index: 1; }
+        .char-card:hover .char-img-box img { transform: scale(1.05); }
+        
+        /* Nhãn Số Tập đặt đè lên góc phải ảnh */
+        .char-episode { 
+            position: absolute; top: 10px; right: 10px; z-index: 2;
+            background: rgba(44, 53, 57, 0.85); color: var(--gold-primary); 
+            padding: 4px 10px; border-radius: 4px; font-size: 0.75em; font-weight: bold;
+            border: 1px solid var(--gold-primary); backdrop-filter: blur(2px);
+        }
+
+        .char-info { padding: 20px 15px; text-align: center; }
+        .char-name { font-size: 1.4em; color: var(--text-dark); margin-bottom: 5px; text-transform: uppercase; }
+        .char-role { font-size: 0.95em; color: var(--text-light); margin: 0; }
+
+        /* FOOTER */
+        footer { background: #2C3539; color: #fff; text-align: center; padding: 40px 20px; margin-top: 80px; border-top: 5px solid var(--gold-primary); }
+        .footer-logo { font-size: 2em; color: var(--gold-primary); margin-bottom: 10px; letter-spacing: 2px; font-family: 'Avenger', sans-serif; }
+        .footer-links a { color: var(--gold-light); font-weight: bold; transition: 0.3s; }
+        .footer-links a:hover { color: var(--gold-primary); }
+    </style>
+</head>
+<body>
+
+    <header class="hero-banner">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="main-title">Đỉnh Núi Tuyết</h1>
+            <h2 class="sub-title">Bách Khoa Toàn Thư Bối Cảnh & Nhân Vật</h2>
+            <div class="quote-container" id="quote-container"></div>
+        </div>
+    </header>
+
+    <main class="directory-section reveal-section">
+        <div class="section-header">
+            <h2 class="section-title">Hồ Sơ Nhân Vật</h2>
+        </div>
+
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterSelection('all', this)">Tất cả</button>
+            <button class="filter-btn" onclick="filterSelection('hoang-toc', this)">Hoàng Tộc</button>
+            <button class="filter-btn" onclick="filterSelection('tuong-quan', this)">Tướng Quân</button>
+            <button class="filter-btn" onclick="filterSelection('tap1', this)">Xuất hiện Tập 1</button>
+            <button class="filter-btn" onclick="filterSelection('tap10', this)">Xuất hiện Tập 10+</button>
+        </div>
+
+        <div class="character-grid">
+            
+            <a href="https://twp-dinhnuituyet100.github.io/TWP_EP1/" class="char-card filter-item tap1 hoang-toc">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Vua Suddhodana - CU.jpg" alt="Vua Suddhodana" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Suddhodana</h3>
+                    <p class="char-role">Vua Vương Quốc Sakya</p>
+                </div>
+            </a>
+
+            <a href="#" class="char-card filter-item tap1 hoang-toc">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Maya.jpg" alt="Hoàng hậu Maya" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Maya</h3>
+                    <p class="char-role">Hoàng Hậu Nhân Hậu</p>
+                </div>
+            </a>
+
+            <a href="#" class="char-card filter-item tap1 hoang-toc">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Amitodhana.jpg" alt="Hoàng thân Amitodhana" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Amitodhana</h3>
+                    <p class="char-role">Hoàng Thân Sakya</p>
+                </div>
+            </a>
+
+            <a href="#" class="char-card filter-item tap1 tuong-quan">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Nettimsa.jpg" alt="Tướng quân Nettimsa" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Nettimsa</h3>
+                    <p class="char-role">Đại Tướng Quân</p>
+                </div>
+            </a>
+
+            <a href="#" class="char-card filter-item tap1 tuong-quan">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Nippaka.jpg" alt="Tướng quân Nippaka" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Nippaka</h3>
+                    <p class="char-role">Mãnh Tướng Tiên Phong</p>
+                </div>
+            </a>
+
+            <a href="#" class="char-card filter-item tap1 tuong-quan">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Nijjata.jpg" alt="Tướng quân Nijjata" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Nijjata</h3>
+                    <p class="char-role">Tướng Quân Hộ Vệ</p>
+                </div>
+            </a>
+
+            <a href="#" class="char-card filter-item tap1 tuong-quan">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Kali.jpg" alt="Tướng Kali" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Kali</h3>
+                    <p class="char-role">Tướng Lĩnh Đỉnh Tuyết Cung</p>
+                </div>
+            </a>
+
+            <a href="#" class="char-card filter-item tap1">
+                <div class="char-img-box">
+                    <span class="char-episode">Tập 1</span>
+                    <span>Chưa có ảnh</span>
+                    <img src="Asita.jpg" alt="Tế sư Asita" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Asita</h3>
+                    <p class="char-role">Đại Tế Sư Uyên Bác</p>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <section class="directory-section reveal-section">
+        <div class="section-header">
+            <h2 class="section-title">Khám Phá Bối Cảnh</h2>
+        </div>
+        <div class="character-grid">
+             <a href="#" class="char-card">
+                <div class="char-img-box setting-img-box">
+                    <span>Chưa có ảnh</span>
+                    <img src="LINK_ANH_CUNG_DIEN.jpg" alt="Vương quốc Sakya" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Vương Quốc Sakya</h3>
+                    <p class="char-role">Trung tâm quyền lực</p>
+                </div>
+            </a>
+            <a href="#" class="char-card">
+                <div class="char-img-box setting-img-box">
+                    <span>Chưa có ảnh</span>
+                    <img src="LINK_ANH_DINH_NUI.jpg" alt="Đỉnh Tuyết Cung" onerror="this.style.display='none'">
+                </div>
+                <div class="char-info">
+                    <h3 class="char-name">Đỉnh Tuyết Cung</h3>
+                    <p class="char-role">Nơi phong ấn hàng ngàn năm</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">THE WHITE PEAK</div>
+        <p>Bản quyền thuộc về Dự án Đỉnh Núi Tuyết & TWP FILM.</p>
+        <p class="footer-links">
+            <a href="https://www.youtube.com/user/SenHongPhapQuang" target="_blank">📺 Kênh Youtube Thiền Tôn Phật Quang</a>
+        </p>
+    </footer>
+
+    <script>
+        // Data Quotes
+        const quotesData = [
+            { text: "Trồng lúa bằng tâm thanh tịnh, thu hoạch sự an bình.", author: "Vua Suddhodana" },
+            { text: "Tuyết rơi ngàn năm che lấp dấu chân người, nhưng không che được dã tâm thiên hạ.", author: "Khuyết Danh" },
+            { text: "Sự thật giống như ngọn giáo giấu trong tuyết, sớm muộn gì cũng sẽ đâm toạc lớp vỏ bọc.", author: "Khuyết Danh" }
+        ];
+
+        document.getElementById('quote-container').innerHTML = quotesData.map((q, i) => 
+            `<div class="quote-slide ${i === 0 ? 'active' : ''}">"${q.text}"<br><span class="quote-author">- ${q.author} -</span></div>`
+        ).join('');
+
+        let slideIdx = 0;
+        const slides = document.querySelectorAll('.quote-slide');
+        setInterval(() => {
+            if(slides.length < 2) return;
+            slides[slideIdx].classList.remove('active');
+            slideIdx = (slideIdx + 1) % slides.length;
+            slides[slideIdx].classList.add('active');
+        }, 5000);
+
+        // Hiệu ứng cuộn mượt
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-section').forEach(el => observer.observe(el));
+
+        // Bộ lọc mượt mà
+        function filterSelection(category, btn) {
+            document.querySelectorAll(".filter-item").forEach(item => {
+                item.style.display = (category === 'all' || item.classList.contains(category)) ? "block" : "none";
+            });
+            document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+        }
+    </script>
+</body>
+</html>
