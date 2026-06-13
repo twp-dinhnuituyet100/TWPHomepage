@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The White Peak - Bách Khoa Toàn Thư</title>
+    <title>The White Peak - Giới thiệu</title>
     
     <link rel="icon" href="TWP BG.jpg" type="image/png">
     
@@ -95,7 +95,7 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1 class="main-title">Đỉnh Núi Tuyết</h1>
-            <h2 class="sub-title">Bách Khoa Toàn Thư Bối Cảnh & Nhân Vật</h2>
+            <h2 class="sub-title">Bách Khoa Bối Cảnh & Nhân Vật</h2>
             <div class="quote-container" id="quote-container"></div>
         </div>
     </header>
@@ -131,7 +131,7 @@
                 <div class="char-img-box">
                     <span class="char-episode">Tập 1</span>
                     <span>Chưa có ảnh</span>
-                    <img src="HoanghauMaya - CU.jpg" alt="Hoàng hậu Maya" onerror="this.style.display='none'">
+                    <img src="HoanghauMaya - Cl-up.jpeg" alt="Hoàng hậu Maya" onerror="this.style.display='none'">
                 </div>
                 <div class="char-info">
                     <h3 class="char-name">Maya</h3>
@@ -253,9 +253,9 @@
     <script>
         // Data Quotes
         const quotesData = [
-            { text: "Trồng lúa bằng tâm thanh tịnh, thu hoạch sự an bình.", author: "Vua Suddhodana" },
-            { text: "Tuyết rơi ngàn năm che lấp dấu chân người, nhưng không che được dã tâm thiên hạ.", author: "Khuyết Danh" },
-            { text: "Sự thật giống như ngọn giáo giấu trong tuyết, sớm muộn gì cũng sẽ đâm toạc lớp vỏ bọc.", author: "Khuyết Danh" }
+            { text: "Ta muốn dùng ân đức để cảm hóa lòng người, đó mới là kế sách trị quốc bền vững muôn đời.", author: "Vua Suddhodana" },
+            { text: "Hạt lúa trong kho là hạt lúa chết. Hạt lúa gieo vào lòng người là hạt lúa sống.", author: "Vua Suddhodana" },
+            { text: "Nhưng một chiến binh vĩ đại không phải là kẻ chỉ biết vung gươm khi nóng giận.", author: "Vua Suddhodana" }
         ];
 
         document.getElementById('quote-container').innerHTML = quotesData.map((q, i) => 
@@ -269,7 +269,7 @@
             slides[slideIdx].classList.remove('active');
             slideIdx = (slideIdx + 1) % slides.length;
             slides[slideIdx].classList.add('active');
-        }, 5000);
+        }, 60000); // Đã cập nhật thành 60000 ms (1 phút)
 
         // Hiệu ứng cuộn mượt
         const observer = new IntersectionObserver(entries => {
